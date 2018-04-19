@@ -5,4 +5,8 @@
     <color name="colorAccent">#24c2fd</color>
 
 
+    <!--Login Screen Color-->
+    <color name="ColorLoginText">#ffffff</color>
+
+
 </resources>
