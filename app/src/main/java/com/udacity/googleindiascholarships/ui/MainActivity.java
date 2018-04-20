@@ -1,6 +1,5 @@
 package com.udacity.googleindiascholarships.ui;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity
 
     Spinner spCourses;
     ImageView ivNavHeader;
+    private final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,8 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //To close all activity and Close the app if user Press the back button.
+            finishAffinity();
         }
     }
 
@@ -163,4 +164,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
     }
+    
+    
 }
