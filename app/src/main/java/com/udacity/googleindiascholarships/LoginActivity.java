@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.udacity.googleindiascholarships.ui.MainActivity;
+
 public class LoginActivity extends AppCompatActivity {
     
    
@@ -15,8 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     
     public void login(View view) {
-        Intent intent  =new Intent(LoginActivity.this,MainActivity.class);
-        startActivity(intent);
+    
     }
     
     @Override
@@ -25,3 +26,4 @@ public class LoginActivity extends AppCompatActivity {
         
     }
 }
+

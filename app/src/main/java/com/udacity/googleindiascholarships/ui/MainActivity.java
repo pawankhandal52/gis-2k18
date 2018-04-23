@@ -1,11 +1,10 @@
-package com.udacity.googleindiascholarships;
+package com.udacity.googleindiascholarships.ui;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,11 +12,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.udacity.googleindiascholarships.R;
+import com.udacity.googleindiascholarships.challenges.ui.ChallengesFragment;
+import com.udacity.googleindiascholarships.community.ui.CommunityFragment;
+import com.udacity.googleindiascholarships.members.ui.MembersFragment;
+import com.udacity.googleindiascholarships.projects.ui.ProjectsFragment;
+import com.udacity.googleindiascholarships.quizzes.ui.QuizzesFragment;
+import com.udacity.googleindiascholarships.stories.ui.StoriesFragment;
+
+import java.util.Arrays;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,10 +42,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -46,68 +56,32 @@ public class MainActivity extends AppCompatActivity
         spCourses.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                int textColor = Color.parseColor("#00aeef");
-                int backgroundColor = Color.parseColor("#ffffff");
 
-                if(position == 0){
-
-                    TextDrawable drawable = TextDrawable
-                            .builder()
-                            .beginConfig()
-                            .bold()
-                            .textColor(textColor)
-                            .toUpperCase()
-                            .withBorder(5)
-                            .endConfig().buildRound("AB",backgroundColor);
-                    ivNavHeader.setImageDrawable(drawable);
-
-
-                }else if(position == 1){
-
-                    TextDrawable drawable = TextDrawable
-                            .builder()
-                            .beginConfig()
-                            .bold()
-                            .textColor(textColor)
-                            .toUpperCase()
-                            .withBorder(5)
-                            .endConfig().buildRound("AI",backgroundColor);
-                    ivNavHeader.setImageDrawable(drawable);
-
-
-                }else if(position == 2){
-
-                    TextDrawable drawable = TextDrawable
-                            .builder()
-                            .beginConfig()
-                            .bold()
-                            .textColor(textColor)
-                            .toUpperCase()
-                            .withBorder(5)
-                            .endConfig().buildRound("WB",backgroundColor);
-                    ivNavHeader.setImageDrawable(drawable);
-
-
-                }else if(position == 3){
-                    TextDrawable drawable = TextDrawable
-                            .builder()
-                            .beginConfig()
-                            .bold()
-                            .textColor(textColor)
-                            .toUpperCase()
-                            .withBorder(5)
-                            .endConfig().buildRound("WI",backgroundColor);
-                    ivNavHeader.setImageDrawable(drawable);
-
-                }
+                setIvNavHeader(Arrays.asList(getResources().getStringArray(
+                        R.array.array_course_abb)).get(position));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                setIvNavHeader(getString(R.string.NA));
             }
         });
     }
+
+    private void setIvNavHeader(String text) {
+
+        TextDrawable drawable = TextDrawable
+                .builder()
+                .beginConfig()
+                .bold()
+                .textColor(ContextCompat.getColor(this,R.color.colorPrimary))
+                .toUpperCase()
+                .withBorder(5)
+                .endConfig().buildRound(text,ContextCompat.getColor(
+                        this,R.color.navBarBackground));
+        ivNavHeader.setImageDrawable(drawable);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -146,25 +120,46 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        displaySelectedScreen(id);
+        return true;
+    }
 
-        if (id == R.id.nav_members) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gis_stories) {
+    private void displaySelectedScreen(int id){
 
-        } else if (id == R.id.nav_projects) {
+        Fragment fragment = null ;
 
-        } else if (id == R.id.nav_challenges) {
+        switch (id){
 
-        } else if (id == R.id.nav_quizzes) {
+            case R.id.nav_members:
+                fragment = new MembersFragment();
+                break;
+            case R.id.nav_gis_stories:
+                fragment = new StoriesFragment();
+                break;
+            case R.id.nav_projects:
+                fragment = new ProjectsFragment();
+                break;
+            case R.id.nav_challenges:
+                fragment = new ChallengesFragment();
+                break;
+            case R.id.nav_quizzes:
+                fragment = new QuizzesFragment();
+                break;
+            case R.id.nav_community:
+                fragment = new CommunityFragment();
+                break;
+            case R.id.nav_settings:
+                fragment = new SettingsFragment();
+                break;
+        }
 
-        } else if (id == R.id.nav_community) {
-
-        } else if (id == R.id.nav_settings) {
-
+        if(fragment != null){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.content_main, fragment).addToBackStack(null);
+            ft.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }
