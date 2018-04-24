@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity
 
     Spinner spCourses;
     ImageView ivNavHeader;
-    private final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
